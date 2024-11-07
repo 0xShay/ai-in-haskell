@@ -36,7 +36,7 @@ costChanged thresh oldParams newParams dataset =
 dw0 :: Params -> Point -> Float
 dw0 params (Point x y) = predictedY params x - y
 dw1 :: Params -> Point -> Float
-dw1 params point@(Point x y) = dw0 point params * x
+dw1 params point@(Point x y) = dw0 params point * x
 
 -- TODO: this sux
 updateParamsDataset :: Float -> Params -> Dataset -> Params
