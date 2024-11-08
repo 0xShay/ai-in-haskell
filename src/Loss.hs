@@ -1,4 +1,4 @@
-module AIH.Loss (
+module Loss (
   maeLoss,
   mseLoss,
   zeroOneLoss,

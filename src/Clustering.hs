@@ -1,4 +1,4 @@
-module AIH.Clustering (
+module Clustering (
   centroid,
   distanceEucSquared,
   distanceEuc,

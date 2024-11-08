@@ -1,10 +1,15 @@
-module AIH.LinRegression (
+module LinRegression (
   Point (..),
   uniLinRegression,
+  xPoint,
+  yPoint,
+  Dataset,
+  Params,
 ) where
 
-import AIH.Loss (mseLoss)
-import Debug.Trace (trace)
+import Loss (mseLoss)
+
+-- import Debug.Trace (trace)
 
 data Point = Point Float Float deriving (Show, Eq)
 
@@ -36,9 +41,8 @@ costChanged thresh oldParams newParams dataset =
 dw0 :: Params -> Point -> Float
 dw0 params (Point x y) = predictedY params x - y
 dw1 :: Params -> Point -> Float
-dw1 params point@(Point x y) = dw0 params point * x
+dw1 params point@(Point x _) = dw0 params point * x
 
--- TODO: this sux
 updateParamsDataset :: Float -> Params -> Dataset -> Params
 updateParamsDataset rate params@(Point w0 w1) dataset =
   let newW0 = w0 - (((2 * rate) / fromIntegral (length dataset)) * sum (map (dw0 params) dataset))
@@ -46,18 +50,9 @@ updateParamsDataset rate params@(Point w0 w1) dataset =
    in Point newW0 newW1
 
 uniLinRegression :: Float -> Float -> Dataset -> Params -> Params
-uniLinRegression a thresh dataset params | trace ("regress " ++ show params) False = undefined
+-- uniLinRegression a thresh dataset params | trace ("regress " ++ show params) False = undefined
 uniLinRegression a thresh dataset params
   | not $ costChanged thresh params newParams dataset = params
   | otherwise = uniLinRegression a thresh dataset newParams
  where
   newParams = updateParamsDataset a params dataset
-
--- test
-main :: IO ()
-main = do
-  let testLearningRate = 0.01
-  let testParams = Point 0 0
-  let testDataSet = [Point 1 2, Point 2 4, Point 3 6, Point 4 8, Point 5 10]
-  let trainedParams = uniLinRegression testLearningRate 0.001 testDataSet testParams
-  print trainedParams
